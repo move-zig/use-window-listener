@@ -2,10 +2,6 @@
 
 A React hook for subscribing to window events and returning a derived value.
 
-[![NPM Version][npm-version-image]][npm-url]
-[![NPM Downloads][npm-downloads-image]][npm-downloads-url]
-[![Test Coverage][coveralls-image]][coveralls-url]
-
 ## Installation
 
 ```bash
