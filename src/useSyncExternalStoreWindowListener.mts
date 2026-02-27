@@ -26,17 +26,22 @@ export const useSyncExternalStoreWindowListener = <TReturnValue, TTarget extends
   targetSelector?: (w: Window) => TTarget,
   addEventListenerOptions?: AddEventListenerOptions | boolean,
 ): Readonly<TReturnValue> | undefined => {
+  /** stores the current value to be returned by getSnapshot */
   const currentValue = useRef<TReturnValue>(fallbackValue);
 
   const subscribe = useCallback((onStoreChange: () => void): (() => void) => {
     const resolvedTarget = (targetSelector ? targetSelector(window) : window) as TTarget;
 
     // update the value once before any events are received
+    // Note: we can't pass any event here; this is why the value selector's
+    // second parameter must be optional
     currentValue.current = valueSelector(resolvedTarget);
 
     const handler = (e: Event) => {
-      // rather than evaluate valueSelector in getSnapshot, we do it here,
-      // where we have access to the event, and store the value in a ref
+      // here we can pass the event so that the user can access variables like
+      // KeyboardEvent.altKey or MouseEvent.button; normally we'd evaluate the
+      // value selector in getSnapshot, but we don't have access to the event
+      // there
       currentValue.current = valueSelector(resolvedTarget, e as TEvent);
       onStoreChange();
     };
@@ -45,7 +50,8 @@ export const useSyncExternalStoreWindowListener = <TReturnValue, TTarget extends
     return () => resolvedTarget.removeEventListener(type, handler, addEventListenerOptions);
   }, [ type, valueSelector, targetSelector, addEventListenerOptions ]);
 
-  // we'd evaluate valueSelector here, but then we couldn't pass the event to it
+  // we would evaluate valueSelector here, but then we couldn't pass the event
+  // to it
   const getSnapshot = () => currentValue.current;
 
   const getServerSnapshot = () => fallbackValue;

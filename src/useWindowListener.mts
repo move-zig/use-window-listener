@@ -31,9 +31,14 @@ export const useWindowListener = <TReturnValue, TTarget extends EventTarget = Wi
   useEffect(() => {
     const resolvedTarget = (targetSelector ? targetSelector(window) : window) as TTarget;
 
+    // update the value once before any events are received
+    // Note: we can't pass any event here; this is why the value selector's
+    // second parameter must be optional
     dispatch(valueSelector(resolvedTarget));
 
     const handler = (e: Event) => {
+      // here we can pass the event so that the user can access variables like
+      // KeyboardEvent.altKey or MouseEvent.button
       dispatch(valueSelector(resolvedTarget, e as TEvent));
     };
 
