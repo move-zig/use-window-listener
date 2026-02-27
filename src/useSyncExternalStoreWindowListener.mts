@@ -13,6 +13,7 @@ import { useCallback, useRef, useSyncExternalStore } from 'react';
  * const valueSelector = (w: Window) => w.scrollY; // module-scope stable reference
  *
  * const SomeComponent: FC = () => {
+ *   // const valueSelector = useCallback((w: Window) => w.scrollY, []); // alternative
  *   const scrollY = useWindowListener('scroll', valueSelector);
  *   return <div>{scrollY}</div>;
  * };
