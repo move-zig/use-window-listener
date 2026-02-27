@@ -1,4 +1,4 @@
-# useWindowListener
+# use-window-listener
 
 A React hook for subscribing to window events and returning a derived value.
 
