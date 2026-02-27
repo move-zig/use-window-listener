@@ -4,6 +4,10 @@
   "description": "A wrapper around useSyncExternalStore to improve DX when creating event listeners",
   "license": "ISC",
   "author": "Dave Welsh",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/move-zig/use-window-listener.git"
+  },
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
