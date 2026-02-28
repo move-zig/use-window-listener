@@ -1,3 +1,8 @@
+import { useSyncWindowListener } from './sync/useSyncWindowListener.mjs';
+
 export { useWindowListener } from './useWindowListener.mjs';
-export { useSyncExternalStoreWindowListener } from './useSyncExternalStoreWindowListener.mjs';
+export { useSyncWindowListener } from './sync/useSyncWindowListener.mjs';
 export { useMediaQuery } from './useMediaQuery.mjs';
+
+/** @deprecated Use `useSyncWindowListener` instead */
+export const useSyncExternalStoreWindowListener = useSyncWindowListener;

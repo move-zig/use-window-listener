@@ -19,6 +19,7 @@ import { useWindowListener } from 'use-window-listener';
 const valueSelector = (w: Window) => w.scrollY;
 
 const MyComponent: FC = () => {
+  // const valueSelector = useCallback((w: Window) => w.scrollY); // alternative
   const scrollY = useWindowListener('scroll', valueSelector);
   return <div>{scrollY}</div>;
 };

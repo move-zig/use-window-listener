@@ -2,6 +2,13 @@ import { useCallback, useRef, useSyncExternalStore } from 'react';
 
 /**
  * Listens for events and returns a value
+ *
+ * Implemented with `useSyncExternalStore`. All components reading this value
+ * are guaranteed to see a consistent snapshot within a single render pass.
+ * Prefer this over `useWindowListener` if your app uses React 18+ with
+ * concurrent rendering and you need consistency across components to avoid
+ * tearing.
+ *
  * @param type the event type to listen for
  * @param valueSelector a selector for the value, e.g., w => w.innerWidth, should be a stable reference
  * @param fallbackValue a default value to use when rendering on the server
@@ -19,7 +26,7 @@ import { useCallback, useRef, useSyncExternalStore } from 'react';
  * };
  */
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
-export const useSyncExternalStoreWindowListener = <TReturnValue, TTarget extends EventTarget = Window, TEvent extends Event = Event>(
+export const useSyncWindowListener = <TReturnValue, TTarget extends EventTarget = Window, TEvent extends Event = Event>(
   type: string,
   valueSelector: (t: TTarget, e?: TEvent) => TReturnValue,
   fallbackValue?: TReturnValue,

@@ -4,13 +4,13 @@
 import React, { type FC } from 'react';
 import { renderToString } from 'react-dom/server';
 
-import { useWindowListener } from './useWindowListener.mjs';
+import { useSyncWindowListener } from './useSyncWindowListener.mjs';
 
-describe('useWindowListener (SSR)', () => {
+describe('useSyncWindowListener (SSR)', () => {
   it('uses the fallback during server render', () => {
 
     const TestComponent: FC = () => {
-      const value = useWindowListener('scroll', w => w.scrollY, 3201);
+      const value = useSyncWindowListener('scroll', w => w.scrollY, 3201);
       return <div data-value={String(value)} />;
     };
 

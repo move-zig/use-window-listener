@@ -1,12 +1,12 @@
 import { act, renderHook } from '@testing-library/react';
 
-import { useSyncExternalStoreWindowListener } from './useSyncExternalStoreWindowListener.mjs';
+import { useSyncWindowListener } from './useSyncWindowListener.mjs';
 
-describe('useWindowListener', () => {
+describe('useSyncWindowListener', () => {
 
   it('updates when an event is fired', () => {
     const valueSelector = (w: Window) => w.scrollY;
-    const { result } = renderHook(() => useSyncExternalStoreWindowListener('scroll', valueSelector));
+    const { result } = renderHook(() => useSyncWindowListener('scroll', valueSelector));
 
     act(() => {
       // change jsdom window width
@@ -46,7 +46,7 @@ describe('useWindowListener', () => {
 
     const valueSelector = (m: MediaQueryList) => m.matches;
     const targetSelector = (w: Window) => w.matchMedia(query);
-    const { result } = renderHook(() => useSyncExternalStoreWindowListener('change', valueSelector, undefined, targetSelector));
+    const { result } = renderHook(() => useSyncWindowListener('change', valueSelector, undefined, targetSelector));
 
     // simulate change -> false
     act(() => {

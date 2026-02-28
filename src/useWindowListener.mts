@@ -2,6 +2,13 @@ import { useEffect, useState } from 'react';
 
 /**
  * Listens for events and returns a value
+ *
+ * Implemented with `useState`/`useEffect`. Suitable for most use cases. In
+ * React 18+ concurrent rendering, this hook is not tearing-safe: if React
+ * defers or interrupts a render, different components may briefly observe
+ * inconsistent snapshots of this value. Use `useSyncWindowListener` if that
+ * matters to you.
+ *
  * @param type the event type to listen for
  * @param valueSelector a selector for the value, e.g., w => w.innerWidth, should be a stable reference
  * @param fallbackValue a default value to use when rendering on the server
@@ -27,7 +34,6 @@ export const useWindowListener = <TReturnValue, TTarget extends EventTarget = Wi
   addEventListenerOptions?: AddEventListenerOptions | boolean,
 ): TReturnValue | undefined => {
   const [ state, dispatch ] = useState<TReturnValue | undefined>(fallbackValue);
-
   useEffect(() => {
     const resolvedTarget = (targetSelector ? targetSelector(window) : window) as TTarget;
 

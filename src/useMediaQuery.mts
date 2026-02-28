@@ -6,6 +6,7 @@ const valueSelector = (m: MediaQueryList) => m.matches;
 
 /**
  * Listens for change events and records whether a MediaQueryList matches or not
+ *
  * @param query the media query used to create the MediaQueryList
  * @returns whether the MediaQueryList matches or not
  *
