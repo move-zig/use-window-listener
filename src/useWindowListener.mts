@@ -27,7 +27,7 @@ import { useEffect, useState } from 'react';
  */
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
 export const useWindowListener = <TReturnValue, TTarget extends EventTarget = Window, TEvent extends Event = Event>(
-  type: string,
+  type: string | string[],
   valueSelector: (t: TTarget, e?: TEvent) => TReturnValue,
   fallbackValue?: TReturnValue,
   targetSelector?: (w: Window) => TTarget,
@@ -48,9 +48,22 @@ export const useWindowListener = <TReturnValue, TTarget extends EventTarget = Wi
       dispatch(valueSelector(resolvedTarget, e as TEvent));
     };
 
-    resolvedTarget.addEventListener(type, handler, addEventListenerOptions);
+    // create a single subscription
+    if (typeof type === 'string') {
+      resolvedTarget.addEventListener(type, handler, addEventListenerOptions);
+      return () => { resolvedTarget.removeEventListener(type, handler, addEventListenerOptions); };
+    }
 
-    return () => { resolvedTarget.removeEventListener(type, handler, addEventListenerOptions); };
+    // subscribe to each event
+    for (const t of type) {
+      resolvedTarget.addEventListener(t, handler, addEventListenerOptions);
+    }
+    return () => {
+      for (const t of type) {
+        resolvedTarget.removeEventListener(t, handler, addEventListenerOptions);
+      }
+    };
+
   }, [ type, valueSelector, targetSelector, addEventListenerOptions ]);
 
   return state;

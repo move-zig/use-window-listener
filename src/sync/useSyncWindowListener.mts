@@ -27,7 +27,7 @@ import { useCallback, useRef, useSyncExternalStore } from 'react';
  */
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
 export const useSyncWindowListener = <TReturnValue, TTarget extends EventTarget = Window, TEvent extends Event = Event>(
-  type: string,
+  type: string | string[],
   valueSelector: (t: TTarget, e?: TEvent) => TReturnValue,
   fallbackValue?: TReturnValue,
   targetSelector?: (w: Window) => TTarget,
@@ -53,8 +53,21 @@ export const useSyncWindowListener = <TReturnValue, TTarget extends EventTarget 
       onStoreChange();
     };
 
-    resolvedTarget.addEventListener(type, handler, addEventListenerOptions);
-    return () => resolvedTarget.removeEventListener(type, handler, addEventListenerOptions);
+    // create a single subscription
+    if (typeof type === 'string') {
+      resolvedTarget.addEventListener(type, handler, addEventListenerOptions);
+      return () => resolvedTarget.removeEventListener(type, handler, addEventListenerOptions);
+    }
+
+    // subscribe to each event
+    for (const t of type) {
+      resolvedTarget.addEventListener(t, handler, addEventListenerOptions);
+    }
+    return () => {
+      for (const t of type) {
+        resolvedTarget.removeEventListener(t, handler, addEventListenerOptions);
+      }
+    };
   }, [ type, valueSelector, targetSelector, addEventListenerOptions ]);
 
   // we would evaluate valueSelector here, but then we couldn't pass the event
